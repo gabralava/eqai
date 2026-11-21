@@ -1,0 +1,735 @@
+<mxfile host="app.diagrams.net" version="24.0.0">
+  <diagram id="c1-context" name="C1 - System Context">
+    <mxGraphModel dx="1669" dy="917" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c1_title" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F0F4F8;strokeColor=#0B4884;strokeWidth=2;fontColor=#052E56;align=left;spacingLeft=20;" value="&lt;b style=&quot;font-size:18px&quot;&gt;C1 - System Context: EQAI Mobile Equalizer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:12px;color:#334E68&quot;&gt;Offline AI-Powered 7-Band Parametric Equalizer (Android App + Offline Build-Time ML &amp;amp; Data Pipeline)&lt;/font&gt;" vertex="1">
+          <mxGeometry height="70" width="1510" x="50" y="30" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_engineer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;arcSize=10;" value="&lt;b style=&quot;font-size:14px&quot;&gt;ML / Data Engineer&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[Person]&lt;/font&gt;&lt;br&gt;&lt;br&gt;Executes the offline build-time data pipeline to parse AutoEQ measurements and train/quantize the TFLite neural networks." vertex="1">
+          <mxGeometry height="175" width="350" x="50" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;arcSize=10;" value="&lt;b style=&quot;font-size:14px&quot;&gt;Audiophile / Mobile User&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[Person]&lt;/font&gt;&lt;br&gt;&lt;br&gt;Selects headphone model from ~4,000 models, enables system-wide EQ, adjusts 7 manual EQ sliders or gives high-level AI sound instructions (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;), and switches profiles." vertex="1">
+          <mxGeometry height="175" width="380" x="640" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_ml_pipeline" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;arcSize=8;dashed=1;" value="&lt;b style=&quot;font-size:14px&quot;&gt;EQAI Offline ML &amp;amp; Data Pipeline&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[Software System: Python CLI, TensorFlow / Keras, SciPy, MLflow]&lt;/font&gt;&lt;br&gt;&lt;br&gt;Offline build-time system that parses AutoEQ frequency responses into Apache Parquet &amp;amp; HDF5, normalizes to a 512-point logarithmic grid (20Hz-20kHz), trains the 1D CNN + MLP 7-band EQ model and Abstract Sound Tuning model, applies INT8 quantization (&amp;lt;1 MB), and packages .tflite models + indexed SQLite AutoEQ database (FTS5 + FLOAT32 BLOBs) into app assets." vertex="1">
+          <mxGeometry height="250" width="350" x="50" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_eqai_app" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#1168BD;strokeColor=#0B4884;fontColor=#FFFFFF;arcSize=8;" value="&lt;b style=&quot;font-size:14px&quot;&gt;EQAI Mobile Application&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[Software System: Android App (Flutter / Riverpod, TFLite AI, Rust Math Engine)]&lt;/font&gt;&lt;br&gt;&lt;br&gt;100% offline on-device intelligent parametric equalizer (7 biquad bands). Flutter (Material 3 / Riverpod / CustomPainter) acts strictly as a thin UI shell; on-device TFLite translates headphone FR &amp;amp; high-level user instructions (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;) into 7-band EQ parameters; and the Rust Mathematical Engine (flutter_rust_bridge + jni-rs) acts as the central intermediary processing manual &amp;amp; AI EQ parameters and calling Android DynamicsProcessing directly." vertex="1">
+          <mxGeometry height="250" width="380" x="640" y="460" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_bt_service" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;" value="&lt;b style=&quot;font-size:14px&quot;&gt;Android OS Bluetooth &amp;amp; Headset Service&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[External System: Android AudioManager &amp;amp; BroadcastReceiver]&lt;/font&gt;&lt;br&gt;&lt;br&gt;System broadcast service emitting wired (ACTION_HEADSET_PLUG) and Bluetooth headphone connection events and device names." vertex="1">
+          <mxGeometry height="176" width="300" x="1260" y="497" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_autoeq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;" value="&lt;b style=&quot;font-size:14px&quot;&gt;AutoEQ GitHub Repository&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[External System: Git / CSV &amp;amp; JSON Dataset]&lt;/font&gt;&lt;br&gt;&lt;br&gt;Open-source database of ~4,000 measured headphone frequency responses and reference equalization curves." vertex="1">
+          <mxGeometry height="170" width="350" x="50" y="845" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_audio_sub" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;" value="&lt;b style=&quot;font-size:14px&quot;&gt;Android OS Audio Subsystem&lt;/b&gt;&lt;br&gt;&lt;font style=&quot;font-size:11px&quot;&gt;[External System: Android DynamicsProcessing API (sessionId = 0)]&lt;/font&gt;&lt;br&gt;&lt;br&gt;Global Android audio session (sessionId = 0) that applies 7-band parametric EQ filters and preamp across all device audio output." vertex="1">
+          <mxGeometry height="170" width="380" x="640" y="845" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_legend" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8F9FA;strokeColor=#CCCCCC;strokeWidth=1;verticalAlign=top;align=left;spacingLeft=16;spacingTop=12;spacingRight=12;fontColor=#222222;fontSize=11;" value="&lt;b style=&quot;font-size:13px&quot;&gt;Legend (C4 Model - System Context)&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;font color=&quot;#08427B&quot; style=&quot;font-size:14px&quot;&gt;&amp;#9632;&lt;/font&gt; &lt;b&gt;Person&lt;/b&gt; (Mobile User / ML Engineer)&lt;br&gt;&lt;font color=&quot;#1168BD&quot; style=&quot;font-size:14px&quot;&gt;&amp;#9632;&lt;/font&gt; &lt;b&gt;Target Software System&lt;/b&gt; (EQAI Mobile App)&lt;br&gt;&lt;font color=&quot;#2E7D32&quot; style=&quot;font-size:14px&quot;&gt;&amp;#9632;&lt;/font&gt; &lt;b&gt;Build-Time System&lt;/b&gt; (Offline ML Pipeline, dashed)&lt;br&gt;&lt;font color=&quot;#999999&quot; style=&quot;font-size:14px&quot;&gt;&amp;#9632;&lt;/font&gt; &lt;b&gt;External System&lt;/b&gt; (AutoEQ Repo / Android OS)&lt;br&gt;&lt;font color=&quot;#555555&quot; style=&quot;font-size:14px&quot;&gt;&amp;#8594;&lt;/font&gt; &lt;b&gt;Relationship&lt;/b&gt; [Protocol / Technology]&lt;br&gt;&lt;br&gt;&lt;i&gt;Runtime execution is 100% offline on Android (7-band EQ).&lt;/i&gt;" vertex="1">
+          <mxGeometry height="230" width="360" x="1200" y="800" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_user_app" edge="1" parent="1" source="c1_user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c1_eqai_app" value="Selects headphones, adjusts 7-band manual EQ sliders,&lt;br&gt;or gives high-level AI sound instructions&lt;br&gt;(&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;)&lt;br&gt;&lt;b&gt;[Flutter Thin UI Shell / Material 3 / Riverpod]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_eng_ml" edge="1" parent="1" source="c1_engineer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c1_ml_pipeline" value="Configures &amp;amp; runs dataset preparation (Parquet + HDF5),&lt;br&gt;TensorFlow/Keras training, validation, and INT8 export&lt;br&gt;&lt;b&gt;[Python CLI / MLflow]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_ml_autoeq" edge="1" parent="1" source="c1_ml_pipeline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c1_autoeq" value="Clones and parses ~4,000 headphone FR measurements&lt;br&gt;into Apache Parquet &amp;amp; HDF5&lt;br&gt;&lt;b&gt;[Git / Python CLI]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_ml_app" edge="1" parent="1" source="c1_ml_pipeline" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="c1_eqai_app" value="Packages quantized INT8 .tflite models (&amp;lt;1 MB)&lt;br&gt;&amp;amp; indexed SQLite AutoEQ DB&lt;br&gt;(FTS5 + FLOAT32 BLOBs) into app assets&lt;br&gt;&lt;b&gt;[Build-time Flutter Assets]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_app_audio" edge="1" parent="1" source="c1_eqai_app" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="c1_audio_sub" value="Rust Mathematical Engine calculates 7-band biquad filters,&lt;br&gt;smoothing &amp;amp; preamp, and directly invokes global system equalizer&lt;br&gt;&lt;b&gt;[Rust JNI (jni-rs) -&amp;gt; Android DynamicsProcessing API]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c1_edge_bt_app" edge="1" parent="1" source="c1_bt_service" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeColor=#555555;strokeWidth=2;fontColor=#222222;labelBackgroundColor=#FFFFFF;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" target="c1_eqai_app" value="Notifies headphone plug/unplug &amp;amp;&lt;br&gt;Bluetooth device name for&lt;br&gt;auto-profile switching&lt;br&gt;&lt;b&gt;[ACTION_HEADSET_PLUG /&lt;br&gt;Bluetooth Broadcasts]&lt;/b&gt;">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="c2-containers" name="C2 - Container Diagram">
+    <mxGraphModel dx="1385" dy="761" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2000" pageHeight="1400" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c2_title_banner" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5F7FA;strokeColor=#CBD5E1;strokeWidth=1.5;fontColor=#1E293B;align=left;spacingLeft=20;verticalAlign=middle;" value="&lt;b style=&quot;font-size:20px;&quot;&gt;EQAI — C2: Container Diagram&lt;/b&gt;&lt;br&gt;&lt;span style=&quot;font-size:13px;color:#444444;&quot;&gt;Offline Intelligent 7-Band Parametric Equalizer for Android — Build-Time ML Pipeline &amp;amp; On-Device Intermediary Runtime Architecture&lt;/span&gt;" vertex="1">
+          <mxGeometry height="65" width="1945" x="30" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_boundary_pipeline" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#444444;strokeWidth=2;dashed=1;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontColor=#222222;fontStyle=1;fontSize=14;" value="Offline ML &amp;amp; Data Pipeline (Build-Time)" vertex="1">
+          <mxGeometry height="300" width="1225" x="350" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_boundary_mobile" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#444444;strokeWidth=2;dashed=1;verticalAlign=top;align=left;spacingLeft=15;spacingTop=10;fontColor=#222222;fontStyle=1;fontSize=14;" value="EQAI Mobile Application (Android Runtime)" vertex="1">
+          <mxGeometry height="725" width="1225" x="350" y="470" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_person_engineer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;arcSize=10;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;ML / Data Engineer&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Person]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Executes offline AutoEQ scraping, 512-pt preprocessing, neural network training, INT8 quantization, and asset bundling." vertex="1">
+          <mxGeometry height="130" width="250" x="30" y="115" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_ext_autoeq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;AutoEQ GitHub Repository&lt;/b&gt;&lt;br&gt;&lt;i&gt;[External System: Git / CSV &amp;amp; JSON Dataset]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Open-source repository of ~4,000 measured headphone frequency response curves and reference targets." vertex="1">
+          <mxGeometry height="135" width="250" x="30" y="275" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_person_user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;arcSize=10;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Audiophile / Mobile User&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Person]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Selects headphone model (~4,000 models), adjusts 7-band manual EQ sliders or enters high-level AI sound instructions, and compares A/B profiles." vertex="1">
+          <mxGeometry height="115" width="280" x="810" y="1265" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_ext_dynamics" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Android OS DynamicsProcessing API&lt;/b&gt;&lt;br&gt;&lt;i&gt;[External System: android.media.audiofx.DynamicsProcessing (Global Session 0)]&lt;/i&gt;&lt;br&gt;&lt;br&gt;System audio server applying global 7-band parametric EQ and input preamp gain across all device playback." vertex="1">
+          <mxGeometry height="155" width="250" x="1725" y="575" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_ext_bluetooth" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Android OS Bluetooth &amp;amp; Broadcasts&lt;/b&gt;&lt;br&gt;&lt;i&gt;[External System: ACTION_HEADSET_PLUG &amp;amp; BluetoothAdapter]&lt;/i&gt;&lt;br&gt;&lt;br&gt;System broadcast service emitting wired headset plug/unplug and Bluetooth device connection events." vertex="1">
+          <mxGeometry height="155" width="250" x="1725" y="965" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_pipeline_scraper" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=10;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;AutoEQ Scraper &amp;amp; Preprocessor&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Python CLI, NumPy, SciPy, Apache Parquet, HDF5]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Parses ~4,000 headphone FR curves, exports intermediate catalog to Apache Parquet, interpolates to 512-point log grid (20-20,000 Hz), normalizes at 1 kHz, computes Harman 2019 correction targets, and saves training/val/test tensors in HDF5 (.h5)." vertex="1">
+          <mxGeometry height="220" width="490" x="385" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_pipeline_trainer" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=10;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Neural Network Training &amp;amp; Quantization Engine&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Python CLI, TensorFlow / Keras, MLflow]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Trains the 1D CNN Encoder + MLP Decoder (1024-pt input -&amp;gt; 7 biquad bands, 7x3 = 21 outputs) and Abstract Sound Tuning model (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;); tracks runs in MLflow; applies native TensorFlow INT8 post-training quantization (&amp;lt;1 MB) and exports .tflite artifacts." vertex="1">
+          <mxGeometry height="220" width="520" x="1025" y="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_app_assets" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Bundled Asset Store (Read-Only)&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Flutter Assets (SQLite FTS5 .db &amp;amp; INT8 .tflite)]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Pre-indexed SQLite (.db) database (~4,000 AutoEQ models with FTS5 search and 512-pt binary FLOAT32 BLOB curves), reference target curves (Harman 2019, Diffuse Field, Flat), and INT8 .tflite models (&amp;lt; 1 MB)." vertex="1">
+          <mxGeometry height="220" width="255" x="365" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_app_ml_worker" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2B6CB0;strokeColor=#1A4971;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;On-Device AI Model (TFLite Worker)&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Dart Background Isolate + tflite_flutter]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Executes INT8 .tflite inference off the UI thread for Headphone FR + Target FR and semantic instructions (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;) to predict 7 biquad bands ([{freq, gain, Q}], 21 values) and forwards them directly to the Rust Mathematical Engine via flutter_rust_bridge (Dart FFI)." vertex="1">
+          <mxGeometry height="225" width="300" x="775" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_app_rust" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B45309;strokeColor=#78350F;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Rust Mathematical Engine (Core Intermediary)&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Rust Shared Library (libeqai_math.so — flutter_rust_bridge + jni-rs)]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Core intermediary receiving 7-band manual EQ from Flutter UI Shell and 7-band AI-predicted EQ from On-Device AI Model via flutter_rust_bridge; computes RBJ biquad math, crossfade smoothing &amp;amp; auto-preamp; returns 512-pt composite FR curve (dB) to Flutter UI Shell; and directly calls Android DynamicsProcessing sound methods via Rust JNI (jni-rs) on global sessionId = 0." vertex="1">
+          <mxGeometry height="245" width="300" x="1255" y="530" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_app_user_db" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Local User Database (Read-Write)&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: SQLite (drift / sqlite3)]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Relational SQLite database persisting user EQProfiles, Bluetooth device associations, cached 7-band inference results, and settings." vertex="1">
+          <mxGeometry height="215" width="255" x="365" y="935" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_app_flutter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;arcSize=8;fontSize=11;spacing=8;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Flutter UI Shell&lt;/b&gt;&lt;br&gt;&lt;i&gt;[Container: Flutter / Dart, Material 3, Riverpod, CustomPainter]&lt;/i&gt;&lt;br&gt;&lt;br&gt;Thin UI shell rendering headphone search, 60fps log-scale 512-pt FR charts via Flutter CustomPainter, 7-band manual EQ controls, and high-level AI instruction controls (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;). State managed via Riverpod; forwards manual EQ to Rust and AI instructions/FR to TFLite Isolate; handles local profile/asset selection &amp;amp; headset broadcasts via EventChannel." vertex="1">
+          <mxGeometry height="235" width="350" x="775" y="925" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_legend_box" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F8FAFC;strokeColor=#94A3B8;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=12;spacingTop=10;fontColor=#1E293B;" value="&lt;b style=&quot;font-size:13px;&quot;&gt;Legend&lt;/b&gt;" vertex="1">
+          <mxGeometry height="375" width="315" x="1660" y="110" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_person" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;fontSize=11;" value="Person (User / Engineer)" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_ext" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;fontSize=11;" value="External System" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="192" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_build" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2E7D32;strokeColor=#1B5E20;fontColor=#FFFFFF;fontSize=11;" value="Build-Time Container (Python CLI / TensorFlow)" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="234" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_flutter" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=11;" value="Thin UI Shell (Flutter / Riverpod / CustomPainter)" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="276" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_ml" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#2B6CB0;strokeColor=#1A4971;fontColor=#FFFFFF;fontSize=11;" value="On-Device AI Model (Dart Isolate + tflite_flutter)" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="318" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_rust" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#B45309;strokeColor=#78350F;fontColor=#FFFFFF;fontSize=11;" value="Core Intermediary (Rust flutter_rust_bridge + jni-rs)" vertex="1">
+          <mxGeometry height="32" width="275" x="1680" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_store" parent="1" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=11;" value="SQLite Data / Asset Store (Cylinder)" vertex="1">
+          <mxGeometry height="40" width="275" x="1680" y="402" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_leg_boundary" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#444444;strokeWidth=1.5;dashed=1;fontColor=#222222;fontSize=11;" value="Dashed Box = System Boundary" vertex="1">
+          <mxGeometry height="20" width="275" x="1680" y="452" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_eng_scraper" edge="1" parent="1" source="c2_person_engineer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.65;exitDx=0;exitDy=0;entryX=0;entryY=0.28;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_pipeline_scraper" value="Runs scraping &amp;amp; prep&lt;br&gt;[Python CLI]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_eng_trainer" edge="1" parent="1" source="c2_person_engineer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.22;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_pipeline_trainer" value="Configures training &amp;amp; INT8 export&lt;br&gt;[Python CLI / MLflow]">
+          <mxGeometry relative="1" x="0.35" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1285" y="144" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_scraper_autoeq" edge="1" parent="1" source="c2_pipeline_scraper" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.78;exitDx=0;exitDy=0;entryX=1;entryY=0.45;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_ext_autoeq" value="Clones &amp;amp; parses FR curves&lt;br&gt;[Git / CSV &amp;amp; JSON I/O]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_scraper_trainer" edge="1" parent="1" source="c2_pipeline_scraper" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_pipeline_trainer" value="512-pt FR &amp;amp; targets&lt;br&gt;[HDF5 (.h5) Tensors]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_scraper_assets" edge="1" parent="1" source="c2_pipeline_scraper" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0.56;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_assets" value="Packages SQLite FTS5 AutoEQ DB (.db)&lt;br&gt;[Build-time Flutter Assets]">
+          <mxGeometry relative="1" y="-10" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_trainer_assets" edge="1" parent="1" source="c2_pipeline_trainer" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.18;exitY=1;exitDx=0;exitDy=0;entryX=0.86;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_assets" value="Exports INT8 .tflite (&amp;lt; 1 MB)&lt;br&gt;[Build-time Flutter Assets]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1119" y="440" />
+              <mxPoint x="584" y="440" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_ml_assets" edge="1" parent="1" source="c2_app_ml_worker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.51;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_assets" value="Loads .tflite weights&lt;br&gt;[tflite_flutter&lt;br&gt;Asset Loader]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_flutter_assets" edge="1" parent="1" source="c2_app_flutter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;exitX=0.14;exitY=0;exitDx=0;exitDy=0;entryX=0.72;entryY=1;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_assets" value="Queries headphone FR &amp;amp; target curves&lt;br&gt;[SQLite FTS5 / AssetBundle]">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="824" y="842" />
+              <mxPoint x="549" y="842" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_flutter_ml" edge="1" parent="1" source="c2_app_flutter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0.43;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#1A4971;strokeWidth=1.8;fontSize=11;fontColor=#1A4971;labelBackgroundColor=#FFFFFF;" target="c2_app_ml_worker" value="AI Path: Forwards Headphone FR,&lt;br&gt;Target FR &amp;amp; high-level instructions&lt;br&gt;(&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;)&lt;br&gt;[Dart Isolate Message]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_ml_rust" edge="1" parent="1" source="c2_app_ml_worker" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.46;entryDx=0;entryDy=0;strokeColor=#1A4971;strokeWidth=1.8;fontSize=11;fontColor=#1A4971;labelBackgroundColor=#FFFFFF;" target="c2_app_rust" value="AI Path:&lt;br&gt;Feeds AI-predicted 7-band EQ&lt;br&gt;[{freq, gain, Q}] (21 values)&lt;br&gt;into Rust intermediary&lt;br&gt;[flutter_rust_bridge (Dart FFI)]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_flutter_rust" edge="1" parent="1" source="c2_app_flutter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0.84;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#78350F;strokeWidth=1.8;fontSize=11;fontColor=#78350F;labelBackgroundColor=#FFFFFF;" target="c2_app_rust" value="Manual Path: Sends 7-band manual EQ [{freq, gain, Q}] &amp;amp; preamp;&lt;br&gt;receives 512-pt composite FR curve (dB) for chart rendering&lt;br&gt;[flutter_rust_bridge (Dart FFI)]">
+          <mxGeometry relative="1" x="0.1" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="1069" y="842" />
+              <mxPoint x="1405" y="842" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_flutter_db" edge="1" parent="1" source="c2_app_flutter" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=classic;startFill=1;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#2E6295;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_user_db" value="Reads/writes EQProfiles,&lt;br&gt;BT mappings &amp;amp; cached 7-band results&lt;br&gt;[SQLite (drift / sqlite3)]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_rust_dynamics" edge="1" parent="1" source="c2_app_rust" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#78350F;strokeWidth=1.8;fontSize=11;fontColor=#78350F;labelBackgroundColor=#FFFFFF;" target="c2_ext_dynamics" value="Direct Audio Path:&lt;br&gt;Directly calls Android sound methods&lt;br&gt;(7-band EQ &amp;amp; preamp, sessionId = 0)&lt;br&gt;[Rust JNI (jni-rs) -&amp;gt; DynamicsProcessing API]">
+          <mxGeometry relative="1" x="-0.1176" y="-57" as="geometry">
+            <mxPoint y="1" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c2_edge_bt_flutter" edge="1" parent="1" source="c2_ext_bluetooth" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeColor=#333333;strokeWidth=1.5;fontSize=11;fontColor=#222222;labelBackgroundColor=#FFFFFF;" target="c2_app_flutter" value="Wired &amp;amp; Bluetooth headset connection broadcasts&lt;br&gt;[EventChannel / BroadcastReceiver (ACTION_HEADSET_PLUG)]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c2_edge_user_flutter" edge="1" parent="1" source="c2_person_user" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;strokeColor=#08427B;strokeWidth=1.8;fontSize=11;fontColor=#08427B;labelBackgroundColor=#FFFFFF;" target="c2_app_flutter" value="Adjusts 7-band manual sliders OR enters high-level AI tuning instructions&lt;br&gt;(&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;) [Touch UI / Material 3]">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="c3-components" name="C3 - Component Diagram">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2400" pageHeight="1680" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c3_title" value="&lt;font style=&quot;font-size: 20px&quot;&gt;&lt;b&gt;EQAI Mobile Application — C3: Component Diagram&lt;/b&gt;&lt;/font&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 13px&quot;&gt;Android 7-Band EQ Runtime Intermediary Pipeline: Flutter Thin UI Shell (Riverpod + CustomPainter), TFLite Isolate, Rust Core (libeqai_math.so via flutter_rust_bridge), SQLite, and Direct jni-rs DynamicsProcessing&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#08427B;strokeColor=#052E56;fontColor=#FFFFFF;align=left;verticalAlign=middle;spacingLeft=20;spacingRight=20;" vertex="1" parent="1">
+          <mxGeometry x="40" y="20" width="1780" height="75" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_legend" value="&lt;b&gt;Legend — C4 Component &amp;amp; Intermediary Pipeline Key&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#FFFFFF;strokeColor=#333333;strokeWidth=1.5;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=13;fontColor=#111111;" vertex="1" parent="1">
+          <mxGeometry x="1860" y="20" width="500" height="305" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_flutter" value="&lt;b&gt;Flutter Thin UI Shell Component&lt;/b&gt;&lt;br/&gt;Presentation, Facade &amp;amp; Data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1878" y="58" width="222" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_tflite" value="&lt;b&gt;On-Device AI Model Component&lt;/b&gt;&lt;br/&gt;TFLite Background Isolate (INT8)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#A9DFBF;strokeColor=#239B56;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2120" y="58" width="222" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_rust" value="&lt;b&gt;Rust Core Intermediary Component&lt;/b&gt;&lt;br/&gt;libeqai_math.so (flutter_rust_bridge &amp;amp; jni-rs)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1878" y="114" width="222" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_store" value="&lt;b&gt;Local Container / Data Store&lt;/b&gt;&lt;br/&gt;SQLite (drift / FTS5) &amp;amp; Assets" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=10;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2120" y="114" width="222" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_ext" value="&lt;b&gt;External System&lt;/b&gt;&lt;br/&gt;Android DynamicsProcessing &amp;amp; Broadcasts" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="1878" y="176" width="222" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_boundary" value="&lt;b&gt;Dashed Box: Runtime Boundary&lt;/b&gt;&lt;br/&gt;UI Shell / TFLite Isolate / Rust Core" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;fillColor=#F8FAFC;strokeColor=#444444;strokeWidth=1.5;fontColor=#222222;fontSize=11;" vertex="1" parent="1">
+          <mxGeometry x="2120" y="176" width="222" height="44" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_leg_note" value="Intermediary Pipeline: Flutter (Riverpod + CustomPainter) is a thin UI shell (no EQ MethodChannel). Both 7-band manual EQ adjustments and TFLite AI outputs route via flutter_rust_bridge into Rust (libeqai_math.so), which directly invokes Android DynamicsProcessing (sessionId = 0) via Rust JNI (jni-rs) and returns 512-pt Float32List curves for UI rendering." style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;fontSize=11;fontColor=#444444;" vertex="1" parent="1">
+          <mxGeometry x="1878" y="234" width="464" height="76" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_boundary_a" value="&lt;b&gt;Boundary A: Flutter Thin UI Shell (Presentation &amp;amp; Thin Shell Facade)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;fillColor=#F4F8FD;strokeColor=#2E6295;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=14;spacingTop=8;fontSize=14;fontColor=#0B3B6E;" vertex="1" parent="1">
+          <mxGeometry x="40" y="115" width="1780" height="445" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_boundary_c" value="&lt;b&gt;Boundary C: Rust Mathematical Engine (libeqai_math.so — Core Intermediary)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;fillColor=#FEF9F3;strokeColor=#B9770E;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=14;spacingTop=8;fontSize=14;fontColor=#7E5109;" vertex="1" parent="1">
+          <mxGeometry x="470" y="640" width="910" height="705" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_boundary_b" value="&lt;b&gt;Boundary B: On-Device AI Model (TFLite Background Isolate)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;fillColor=#F3FBF6;strokeColor=#239B56;strokeWidth=2;verticalAlign=top;align=left;spacingLeft=14;spacingTop=8;fontSize=14;fontColor=#186A3B;" vertex="1" parent="1">
+          <mxGeometry x="1520" y="640" width="840" height="640" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ui_home" value="&lt;b&gt;Home &amp;amp; Profile Switcher UI&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Flutter Widget]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Master EQ toggle, active headphone card, A/B instant comparison, settings &amp;amp; onboarding." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="65" y="160" width="390" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ui_tuning" value="&lt;b&gt;Manual &amp;amp; AI Command UI&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Flutter Widget]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Captures manual 7-band sliders/presets AND high-level AI sound commands (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;)." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="485" y="160" width="430" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ui_visualizer" value="&lt;b&gt;Interactive FR &amp;amp; EQ Curve Visualizer&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Flutter CustomPainter (Native Canvas API)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Renders 60fps log-scale (20Hz-20kHz) dB chart and draggable 7-band EQ nodes using 512-pt Float32List curves returned by Rust." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="945" y="160" width="430" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ui_search" value="&lt;b&gt;Headphone Search UI&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Flutter Widget]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Live fuzzy search across ~4,000 AutoEQ models (Over-Ear, In-Ear, TWS)." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1405" y="160" width="390" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_headset_listener" value="&lt;b&gt;HeadsetEventListener&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Lightweight EventChannel + BroadcastReceiver]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Listens ONLY for wired/Bluetooth headset plug/unplug and device names (ACTION_HEADSET_PLUG, Bluetooth ACL) so the shell can auto-select profiles." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="65" y="385" width="360" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ui_dispatcher" value="&lt;b&gt;UIShellDispatcher (Thin Facade)&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Riverpod Controller (flutter_riverpod)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Thin routing facade — forwards 7-band manual EQ adjustments to Rust via flutter_rust_bridge, forwards high-level AI instructions + FR to AIModelDispatcher, and updates UI chart state with Rust&amp;apos;s 512-pt Float32List curve output. (Does NOT send EQ parameters to Android via MethodChannel!)" style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="475" y="385" width="790" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_data_repos" value="&lt;b&gt;Headphone &amp;amp; Profile Repositories&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Dart Data Repositories (drift / sqlite3)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Queries bundled read-only SQLite (FTS5) AutoEQ database (binary FLOAT32 BLOB curves) and persists saved EQProfiles, Bluetooth mappings, and cached 7-band inference results in local SQLite (drift)." style="fillColor=#85BBF0;strokeColor=#5D82A8;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1315" y="385" width="480" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_store_assets" value="&lt;b&gt;Bundled Asset Store&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Container: SQLite FTS5 .db &amp;amp; INT8 .tflite Assets]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Read-only packaged ~4,000 AutoEQ headphone FR measurements (SQLite FTS5 + binary FLOAT32 BLOBs) and quantized INT8 .tflite neural network models." style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1870" y="380" width="480" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ext_bt_service" value="&lt;b&gt;Android OS Bluetooth &amp;amp; Headset Service&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[External System: Broadcasts]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;System broadcast service emitting ACTION_HEADSET_PLUG and Bluetooth ACL connection events and device names." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="40" y="675" width="385" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_rust_cascade" value="&lt;b&gt;CascadeFRCurveEvaluator&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Rust Module]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Computes 512-pt Float32List composite 7-band EQ &amp;amp; compensated FR curves (dB) and returns them to Flutter UI Shell via flutter_rust_bridge for chart visualization." style="fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="495" y="685" width="405" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_rust_ffi_rx" value="&lt;b&gt;FfiCommandReceiver&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Rust FFI Entrypoint (flutter_rust_bridge)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Receives 7-band manual EQ settings from Flutter UI Shell and 7-band AI-predicted EQ settings from On-Device AI Model via flutter_rust_bridge." style="fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="940" y="685" width="415" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_rust_biquad" value="&lt;b&gt;BiquadCoefficientEngine&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Rust Module (RBJ Cookbook)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Calculates b0, b1, b2, a1, a2 for 7 biquad bands (Peak Bell, Low Shelf, and High Shelf filters)." style="fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="495" y="915" width="405" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_rust_interp" value="&lt;b&gt;ParameterInterpolator &amp;amp; PreampGuard&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Rust Module]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Smooths crossfade transitions (click-free switching) and computes auto-preamp headroom to prevent clipping." style="fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="940" y="915" width="415" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_rust_android_driver" value="&lt;b&gt;AndroidAudioSystemDriver&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: Rust JNI Audio Caller (jni-rs)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Directly invokes Android android.media.audiofx.DynamicsProcessing methods via Rust JNI (jni-rs) on global sessionId = 0 (MODIFY_AUDIO_SETTINGS) to apply 7-band parametric EQ and input preamp gain." style="fillColor=#F5CBA7;strokeColor=#B9770E;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="615" y="1145" width="620" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ml_base_predictor" value="&lt;b&gt;Base EQ TFLite Predictor&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: TFLite Interpreter (1D CNN + MLP)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Predicts 7 baseline biquad bands [{freq, gain, Q}] (7x3 = 21 outputs) from [Headphone FR (512) + Target FR (512)]." style="fillColor=#A9DFBF;strokeColor=#239B56;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1545" y="690" width="380" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ml_abstract_predictor" value="&lt;b&gt;Abstract Sound Tuning Predictor&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: TFLite Interpreter (Semantic Delta Model)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Maps high-level user commands (&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;, &amp;quot;Warmth&amp;quot;, &amp;quot;Clarity&amp;quot;) + FR/7-band state into 7-band EQ parameter adjustments Δ[{freq, gain, Q}] (7x3 = 21)." style="fillColor=#A9DFBF;strokeColor=#239B56;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1955" y="690" width="380" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ml_ffi_forwarder" value="&lt;b&gt;AI-to-Rust FFI Forwarder&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Component: TFLite Isolate Output Bridge (flutter_rust_bridge)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Feeds AI-computed 7-band EQ parameters ([{freq, gain, Q}]) directly into Rust (FfiCommandReceiver) via flutter_rust_bridge and notifies the UI Shell with updated curve/band state." style="fillColor=#A9DFBF;strokeColor=#239B56;fontColor=#000000;rounded=1;whiteSpace=wrap;html=1;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1615" y="990" width="650" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_ext_android_audio" value="&lt;b&gt;Android OS Audio Subsystem&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[External System: Android DynamicsProcessing API (sessionId = 0)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Global Android audio output session (sessionId = 0) executing system-wide 7-band parametric EQ and input preamp gain." style="rounded=1;whiteSpace=wrap;html=1;fillColor=#999999;strokeColor=#6B6B6B;fontColor=#FFFFFF;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="625" y="1430" width="600" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_store_local_db" value="&lt;b&gt;Local User Database&lt;/b&gt;&lt;br/&gt;&lt;font style=&quot;font-size: 11px&quot;&gt;[Container: SQLite (drift / sqlite3)]&lt;/font&gt;&lt;br/&gt;&lt;br/&gt;Stores user EQProfiles, Bluetooth device mappings, cached 7-band ML inference outputs, and preferences in local SQLite." style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=14;fillColor=#438DD5;strokeColor=#2E6295;fontColor=#FFFFFF;fontSize=12;spacing=8;" vertex="1" parent="1">
+          <mxGeometry x="1360" y="1430" width="450" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_home_disp" value="Master EQ, A/B &amp;amp; profile switch&lt;br/&gt;[Riverpod Action]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.85;exitY=1;entryX=0.07;entryY=0;" edge="1" parent="1" source="c3_ui_home" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="397" y="350" />
+              <mxPoint x="530" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_tuning_disp" value="Manual 7-band EQ &amp;amp; AI commands&lt;br/&gt;(&amp;quot;More Bass&amp;quot;, &amp;quot;Richer Sound&amp;quot;) [Flutter UI]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.285;entryY=0;" edge="1" parent="1" source="c3_ui_tuning" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_disp_viz" value="512-pt Float32List FR, EQ &amp;amp; target curves&lt;br/&gt;[60fps CustomPainter Update]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.85;exitY=0;entryX=0.47;entryY=1;" edge="1" parent="1" source="c3_ui_dispatcher" target="c3_ui_visualizer">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_search_disp" value="Selects HeadphoneModel&lt;br/&gt;[Riverpod Action]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.12;exitY=1;entryX=0.96;entryY=0;" edge="1" parent="1" source="c3_ui_search" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1452" y="350" />
+              <mxPoint x="1233" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_search_repos" value="FTS5 query (~4,000 models)&lt;br/&gt;[SQLite FTS5 / Dart Future]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.55;exitY=1;entryX=0.635;entryY=0;" edge="1" parent="1" source="c3_ui_search" target="c3_data_repos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_bt_headset" value="ACTION_HEADSET_PLUG &amp;amp; BT ACL&lt;br/&gt;[System Broadcasts]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#555555;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.46;entryY=1;" edge="1" parent="1" source="c3_ext_bt_service" target="c3_headset_listener">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_headset_disp" value="Plug/BT&lt;br/&gt;device&lt;br/&gt;event" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="c3_headset_listener" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_disp_repos" value="EQProfiles&lt;br/&gt;&amp;amp; FR" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="c3_ui_dispatcher" target="c3_data_repos">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_repos_assets" value="SQLite FTS5&lt;br/&gt;[FLOAT32 BLOBs]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.55;" edge="1" parent="1" source="c3_data_repos" target="c3_store_assets">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_repos_db" value="Reads &amp;amp; persists EQProfiles &amp;amp; BT mappings&lt;br/&gt;[SQLite (drift / sqlite3)]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#2E6295;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.35;exitY=1;entryX=0.28;entryY=0;" edge="1" parent="1" source="c3_data_repos" target="c3_store_local_db">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1483" y="575" />
+              <mxPoint x="1485" y="575" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_disp_rust" value="Manual 7-band EQ [{freq, gain, Q}]&lt;br/&gt;[flutter_rust_bridge]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.8;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.77;exitY=1;entryX=0.34;entryY=0;" edge="1" parent="1" source="c3_ui_dispatcher" target="c3_rust_ffi_rx">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_cascade_disp" value="512-pt Float32List composite EQ &amp;amp; FR (dB)&lt;br/&gt;[flutter_rust_bridge Return]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.8;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.45;exitY=0;entryX=0.256;entryY=1;" edge="1" parent="1" source="c3_rust_cascade" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_disp_ai_base" value="AIModelDispatcher: [Headphone FR + Target FR]&lt;br/&gt;[Isolate SendPort]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.8;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.88;exitY=1;entryX=0.22;entryY=0;" edge="1" parent="1" source="c3_ui_dispatcher" target="c3_ml_base_predictor">
+          <mxGeometry x="-0.25" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1170" y="592" />
+              <mxPoint x="1629" y="592" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_disp_ai_abs" value="AIModelDispatcher: Semantic command + FR/bands&lt;br/&gt;[Isolate SendPort]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.8;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.92;exitY=1;entryX=0.2;entryY=0;" edge="1" parent="1" source="c3_ui_dispatcher" target="c3_ml_abstract_predictor">
+          <mxGeometry x="0.35" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1202" y="618" />
+              <mxPoint x="2031" y="618" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_assets_base" value="Loads INT8 Base .tflite&lt;br/&gt;[Asset Bundle]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.06;exitY=1;entryX=0.93;entryY=0;" edge="1" parent="1" source="c3_store_assets" target="c3_ml_base_predictor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_assets_abs" value="Loads INT8 Semantic .tflite&lt;br/&gt;[Asset Bundle]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.65;exitY=1;entryX=0.59;entryY=0;" edge="1" parent="1" source="c3_store_assets" target="c3_ml_abstract_predictor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_base_fwd" value="Baseline 7 biquad bands [{freq, gain, Q}]&lt;br/&gt;[Isolate Memory]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.18;entryY=0;" edge="1" parent="1" source="c3_ml_base_predictor" target="c3_ml_ffi_forwarder">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_abs_fwd" value="7-band semantic deltas Δ[{freq, gain, Q}]&lt;br/&gt;[Isolate Memory]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.81;entryY=0;" edge="1" parent="1" source="c3_ml_abstract_predictor" target="c3_ml_ffi_forwarder">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_fwd_rust" value="AI 7-band EQ [{freq, gain, Q}]&lt;br/&gt;[flutter_rust_bridge]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.55;entryX=1;entryY=0.5;" edge="1" parent="1" source="c3_ml_ffi_forwarder" target="c3_rust_ffi_rx">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1415" y="1106" />
+              <mxPoint x="1415" y="765" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_fwd_ui" value="Notifies UI Shell (bands &amp;amp; curve state)&lt;br/&gt;[Isolate ReceivePort]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#239B56;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.22;entryX=0.968;entryY=1;" edge="1" parent="1" source="c3_ml_ffi_forwarder" target="c3_ui_dispatcher">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1450" y="1036" />
+              <mxPoint x="1450" y="575" />
+              <mxPoint x="1240" y="575" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_rx_biquad" value="Passes band specs&lt;br/&gt;[Rust Call]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.15;exitY=1;entryX=0.7;entryY=0;" edge="1" parent="1" source="c3_rust_ffi_rx" target="c3_rust_biquad">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1002" y="875" />
+              <mxPoint x="779" y="875" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_rx_interp" value="Target crossfade state&lt;br/&gt;[Rust Call]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c3_rust_ffi_rx" target="c3_rust_interp">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_biquad_cascade" value="Passes b0, b1, b2, a1, a2&lt;br/&gt;[Rust Call]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.36;exitY=0;entryX=0.36;entryY=1;" edge="1" parent="1" source="c3_rust_biquad" target="c3_rust_cascade">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_cascade_interp" value="Peak dB for&lt;br/&gt;preamp guard" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.75;entryX=0;entryY=0.55;" edge="1" parent="1" source="c3_rust_cascade" target="c3_rust_interp">
+          <mxGeometry x="0.45" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="920" y="805" />
+              <mxPoint x="920" y="1003" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c3_e_biquad_driver" value="Biquad filter params&lt;br/&gt;[Rust Call]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.6;exitY=1;entryX=0.2;entryY=0;" edge="1" parent="1" source="c3_rust_biquad" target="c3_rust_android_driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_interp_driver" value="Smoothed params &amp;amp; preamp&lt;br/&gt;[Rust Call]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=1.5;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.4;exitY=1;entryX=0.79;entryY=0;" edge="1" parent="1" source="c3_rust_interp" target="c3_rust_android_driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c3_e_driver_audio" value="Direct 7-band EQ &amp;amp; preamp calls&lt;br/&gt;[Rust JNI (jni-rs) -&amp;gt; DynamicsProcessing API (sessionId = 0)]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#B9770E;fontSize=11;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c3_rust_android_driver" target="c3_ext_android_audio">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="c4-code" name="C4 - Code &amp; Class Diagram">
+    <mxGraphModel dx="1800" dy="1200" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="2600" pageHeight="1840" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="c4_title" value="&lt;b style=&quot;font-size:18px;&quot;&gt;EQAI — C4 Level 4: Code &amp;amp; Class Diagram (7-Band EQ)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:12px;&quot;&gt;Locked-in stack: Flutter (flutter_riverpod + CustomPainter + sqlite3/drift), TFLite Isolate, flutter_rust_bridge Math Engine (7 bands / 21 floats), Rust jni-rs -&amp;gt; Android DynamicsProcessing &amp;amp; BroadcastReceiver (100% offline)&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=16;fillColor=#0B3954;strokeColor=#052233;fontColor=#FFFFFF;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="30" y="20" width="1660" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_legend" value="&lt;b&gt;Legend &amp;amp; Stereotypes&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;background:#D1ECF1;color:#0C2D36;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;/span&gt; Entity &amp;nbsp; &lt;span style=&quot;background:#E2F0D9;color:#1B3B0E;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;value_object&amp;gt;&amp;gt;&lt;/span&gt; Value Object &amp;nbsp; &lt;span style=&quot;background:#FFF3CD;color:#332701;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;/span&gt; Enum &amp;nbsp; &lt;span style=&quot;background:#CCE5FF;color:#002752;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;riverpod_notifier&amp;gt;&amp;gt;/&amp;lt;&amp;lt;custom_painter&amp;gt;&amp;gt;&lt;/span&gt; Flutter UI &amp;nbsp; &lt;span style=&quot;background:#D6EAF8;color:#102F47;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;repository&amp;gt;&amp;gt;&lt;/span&gt; SQLite Repo&lt;br/&gt;&lt;span style=&quot;background:#FDEBD0;color:#4D3004;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;flutter_rust_bridge&amp;gt;&amp;gt;/&amp;lt;&amp;lt;listener&amp;gt;&amp;gt;&lt;/span&gt; FFI / Event &amp;nbsp; &lt;span style=&quot;background:#E8DAEF;color:#2E103B;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;service&amp;gt;&amp;gt;/&amp;lt;&amp;lt;worker&amp;gt;&amp;gt;&lt;/span&gt; TFLite Isolate &amp;nbsp; &lt;span style=&quot;background:#FADBD8;color:#4A130E;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;#[repr(C)] struct&amp;gt;&amp;gt;&lt;/span&gt; / &lt;span style=&quot;background:#F6DDCC;color:#4D1F00;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;module&amp;gt;&amp;gt;/&amp;lt;&amp;lt;module / jni-rs&amp;gt;&amp;gt;&lt;/span&gt; Rust Crate&lt;br/&gt;&lt;span style=&quot;background:#D4EFDF;color:#0B3B1E;padding:1px 4px;&quot;&gt;&amp;lt;&amp;lt;external JNI target&amp;gt;&amp;gt;/&amp;lt;&amp;lt;class&amp;gt;&amp;gt;&lt;/span&gt; Android OS &amp;nbsp; | &amp;nbsp; &lt;b&gt;━━▶&lt;/b&gt; Association/Call &amp;nbsp; &lt;b&gt;◆━━&lt;/b&gt; Composition &amp;nbsp; &lt;b&gt;- - ▶&lt;/b&gt; flutter_rust_bridge / jni-rs / Dependency" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=middle;spacingLeft=12;spacingRight=10;fontSize=11;fillColor=#F8F9FA;strokeColor=#6C757D;fontColor=#212529;strokeWidth=1.5;" vertex="1" parent="1">
+          <mxGeometry x="1760" y="20" width="810" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_boundary_flutter_ui" value="&lt;b&gt;1. Flutter Thin UI Shell &amp;amp; Domain Types (lib/)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeWidth=2;fillColor=#F2F7FC;strokeColor=#1E6091;fontColor=#0B3954;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;container=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="30" y="140" width="1660" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_boundary_ai_isolate" value="&lt;b&gt;2. On-Device AI Model (lib/ai/ — TFLite Isolate)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeWidth=2;fillColor=#F6F3FC;strokeColor=#5A3E9E;fontColor=#2E1A5E;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;container=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1760" y="140" width="810" height="860" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_boundary_rust_math" value="&lt;b&gt;3. Rust Mathematical Engine &amp;amp; Direct Android Audio Driver (rust/src/ — libeqai_math.so)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeWidth=2;fillColor=#FFF7F0;strokeColor=#A04000;fontColor=#5C2400;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;container=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="30" y="1080" width="1660" height="730" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_boundary_android_os" value="&lt;b&gt;4. Android OS &amp;amp; Lightweight Broadcast Receiver (android/.../eqai/)&lt;/b&gt;" style="rounded=1;whiteSpace=wrap;html=1;dashed=1;dashPattern=8 4;strokeWidth=2;fillColor=#F2FAF5;strokeColor=#1E8449;fontColor=#0E4725;verticalAlign=top;align=left;spacingLeft=14;spacingTop=10;fontSize=14;container=0;" vertex="1" parent="1" connectable="0">
+          <mxGeometry x="1760" y="1080" width="810" height="730" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_filter_type" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;br/&gt;FilterType&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;peakBell&lt;br/&gt;lowShelf&lt;br/&gt;highShelf" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FFF3CD;strokeColor=#C69500;fontColor=#332701;" vertex="1" parent="1">
+          <mxGeometry x="55" y="195" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_target_curve_type" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;enum&amp;gt;&amp;gt;&lt;br/&gt;TargetCurveType&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;harman2019&lt;br/&gt;diffuseField&lt;br/&gt;flat" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FFF3CD;strokeColor=#C69500;fontColor=#332701;" vertex="1" parent="1">
+          <mxGeometry x="55" y="325" width="230" height="105" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_biquad_band" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;value_object&amp;gt;&amp;gt;&lt;br/&gt;BiquadBand&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;7 bands per profile (7x3 = 21 tuning floats)&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;+bandIndex: int (0..6)&lt;br/&gt;+type: FilterType&lt;br/&gt;+frequencyHz: double&lt;br/&gt;+gainDb: double&lt;br/&gt;+qFactor: double" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#E2F0D9;strokeColor=#3B7D23;fontColor=#1B3B0E;" vertex="1" parent="1">
+          <mxGeometry x="55" y="455" width="280" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_headphone_repo" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;repository&amp;gt;&amp;gt;&lt;br/&gt;HeadphoneRepository&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;-autoeqSqliteDb: SqliteDatabase (FTS5 + FLOAT32 BLOBs)&lt;hr/&gt;+ftsSearch(query: String, limit: int): Future&amp;lt;List&amp;lt;HeadphoneModel&amp;gt;&amp;gt;&lt;br/&gt;+findByBluetoothName(btName: String): Future&amp;lt;HeadphoneModel?&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D6EAF8;strokeColor=#21618C;fontColor=#102F47;" vertex="1" parent="1">
+          <mxGeometry x="55" y="630" width="365" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_profile_repo" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;repository&amp;gt;&amp;gt;&lt;br/&gt;ProfileRepository&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;-userSqliteDb: DriftSqliteDatabase (user_profiles.db)&lt;hr/&gt;+saveProfile(profile: EQProfile): Future&amp;lt;void&amp;gt;&lt;br/&gt;+getProfileByHeadphone(id: String): Future&amp;lt;EQProfile?&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D6EAF8;strokeColor=#21618C;fontColor=#102F47;" vertex="1" parent="1">
+          <mxGeometry x="55" y="810" width="365" height="160" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_freq_response" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;value_object&amp;gt;&amp;gt;&lt;br/&gt;FrequencyResponse&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+frequenciesHz: Float32List [512]&lt;br/&gt;+magnitudesDb: Float32List [512]&lt;hr/&gt;+normalizeAt1kHz(): FrequencyResponse&lt;br/&gt;+computeTargetDelta(target: FrequencyResponse): Float32List" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#E2F0D9;strokeColor=#3B7D23;fontColor=#1B3B0E;" vertex="1" parent="1">
+          <mxGeometry x="460" y="195" width="465" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_headphone_model" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;br/&gt;HeadphoneModel&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+id: String&lt;br/&gt;+brand: String&lt;br/&gt;+name: String&lt;br/&gt;+formFactor: HeadphoneFormFactor&lt;br/&gt;+measuredFr: FrequencyResponse" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D1ECF1;strokeColor=#0C5460;fontColor=#0C2D36;" vertex="1" parent="1">
+          <mxGeometry x="460" y="375" width="465" height="145" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_abstract_tuning" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;value_object&amp;gt;&amp;gt;&lt;br/&gt;AbstractTuningParams&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+moreBass: double (-1.0..1.0)&lt;br/&gt;+richerSound: double (-1.0..1.0)&lt;br/&gt;+warmth: double (-1.0..1.0)&lt;br/&gt;+clarity: double (-1.0..1.0)&lt;hr/&gt;+toVector(): Float32List [4]" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#E2F0D9;strokeColor=#3B7D23;fontColor=#1B3B0E;" vertex="1" parent="1">
+          <mxGeometry x="460" y="545" width="465" height="155" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_eq_profile" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;entity&amp;gt;&amp;gt;&lt;br/&gt;EQProfile&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+profileId: String&lt;br/&gt;+headphoneId: String&lt;br/&gt;+bluetoothDeviceName: String?&lt;br/&gt;+targetType: TargetCurveType&lt;br/&gt;+baseAiBands: List&amp;lt;BiquadBand&amp;gt; [7]&lt;br/&gt;+abstractParams: AbstractTuningParams&lt;br/&gt;+manualOffsets: List&amp;lt;BiquadBand&amp;gt; [7]&lt;br/&gt;+effectiveBands: List&amp;lt;BiquadBand&amp;gt; [7]&lt;br/&gt;+preampDb: double&lt;br/&gt;+isEnabled: bool" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D1ECF1;strokeColor=#0C5460;fontColor=#0C2D36;" vertex="1" parent="1">
+          <mxGeometry x="460" y="725" width="465" height="245" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_ui_shell_controller" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;riverpod_notifier&amp;gt;&amp;gt;&lt;br/&gt;UIShellController (flutter_riverpod)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Thin UI shell Notifier driving CustomPainter with 512-pt Float32List curves&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-aiDispatcher: AIModelDispatcher&lt;br/&gt;-rustFfi: RustEqEngineFfi&lt;br/&gt;-headsetListener: HeadsetEventListener&lt;br/&gt;-chartPainter: FrequencyResponseChartPainter&lt;hr/&gt;+onManualBandChanged(band: BiquadBand): Future&amp;lt;void&amp;gt;&lt;br/&gt;+onAbstractInstruction(params: AbstractTuningParams): Future&amp;lt;void&amp;gt;&lt;br/&gt;+onHeadphoneSelected(model: HeadphoneModel): Future&amp;lt;void&amp;gt;&lt;br/&gt;+toggleBypass(enabled: bool): Future&amp;lt;void&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#CCE5FF;strokeColor=#004085;fontColor=#002752;" vertex="1" parent="1">
+          <mxGeometry x="985" y="190" width="675" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_fr_chart_painter" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;custom_painter&amp;gt;&amp;gt;&lt;br/&gt;FrequencyResponseChartPainter (CustomPainter)&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Renders 512-pt logarithmic FR curves (20Hz-20kHz) directly on Flutter Canvas&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;+targetCurve512: Float32List [512]&lt;br/&gt;+measuredCurve512: Float32List [512]&lt;br/&gt;+compensatedCurve512: Float32List [512]&lt;hr/&gt;+paint(canvas: Canvas, size: Size): void&lt;br/&gt;+shouldRepaint(oldDelegate: FrequencyResponseChartPainter): bool" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#CCE5FF;strokeColor=#004085;fontColor=#002752;" vertex="1" parent="1">
+          <mxGeometry x="985" y="450" width="675" height="165" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_headset_listener" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;listener&amp;gt;&amp;gt;&lt;br/&gt;HeadsetEventListener&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Lightweight EventChannel subscriber for wired/BT connection events&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-headsetEventChannel: EventChannel&lt;hr/&gt;+onHeadsetConnected(): Stream&amp;lt;HeadsetEvent&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FDEBD0;strokeColor=#B9770E;fontColor=#4D3004;" vertex="1" parent="1">
+          <mxGeometry x="985" y="645" width="675" height="115" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_rust_eq_ffi" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;flutter_rust_bridge&amp;gt;&amp;gt;&lt;br/&gt;RustEqEngineFfi&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;flutter_rust_bridge binding calling libeqai_math.so; returns 512-pt composite FR curve&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-nativeLib: DynamicLibrary (libeqai_math.so)&lt;hr/&gt;+applyManualBands(bands: List&amp;lt;BiquadBand&amp;gt; [7], preampDb: double): Float32List [512]&lt;br/&gt;+applyAiBands(bands: List&amp;lt;BiquadBand&amp;gt; [7]): Float32List [512]&lt;br/&gt;+setBypass(enabled: bool): void&lt;br/&gt;+crossfadeProfile(from: List&amp;lt;BiquadBand&amp;gt; [7], to: List&amp;lt;BiquadBand&amp;gt; [7], ms: int): Float32List [512]" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FDEBD0;strokeColor=#B9770E;fontColor=#4D3004;" vertex="1" parent="1">
+          <mxGeometry x="985" y="790" width="675" height="195" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_ai_dispatcher" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;service&amp;gt;&amp;gt;&lt;br/&gt;AIModelDispatcher&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;-isolatePort: SendPort&lt;br/&gt;-rustFfi: RustEqEngineFfi&lt;hr/&gt;+runAutoEq(measuredFr: Float32List [512], targetFr: Float32List [512]): Future&amp;lt;Float32List&amp;gt;&lt;br/&gt;+runAbstractTuning(instructionVec: Float32List [4], baseBands: List&amp;lt;BiquadBand&amp;gt; [7], measuredFr: Float32List [512]): Future&amp;lt;Float32List&amp;gt;" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#E8DAEF;strokeColor=#6C3483;fontColor=#2E103B;" vertex="1" parent="1">
+          <mxGeometry x="1805" y="200" width="725" height="290" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_tflite_worker" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;worker&amp;gt;&amp;gt;&lt;br/&gt;TFLiteIsolateWorker&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Predicts 7 EQ bands (Float32List [21] = 7x3) &amp;amp; forwards straight into Rust via flutter_rust_bridge&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-baseInterpreter: Interpreter&lt;br/&gt;-abstractInterpreter: Interpreter&lt;br/&gt;-rustFfiPort: RustEqEngineFfi (flutter_rust_bridge)&lt;hr/&gt;+predictBaseBands(input1024: Float32List): List&amp;lt;BiquadBand&amp;gt; [7]&lt;br/&gt;+predictAbstractBands(bands21: Float32List, semanticVec4: Float32List): List&amp;lt;BiquadBand&amp;gt; [7]&lt;br/&gt;+forwardToRustEngine(bands: List&amp;lt;BiquadBand&amp;gt; [7]): Float32List [512]" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#E8DAEF;strokeColor=#6C3483;fontColor=#2E103B;" vertex="1" parent="1">
+          <mxGeometry x="1805" y="565" width="725" height="350" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_ffi_biquad_spec" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;#[repr(C)] struct&amp;gt;&amp;gt;&lt;br/&gt;FfiBiquadSpec&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;7 bands: [FfiBiquadSpec; 7] (21 floats)&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;+filter_type: u8&lt;br/&gt;+freq_hz: f64&lt;br/&gt;+gain_db: f64&lt;br/&gt;+q: f64&lt;br/&gt;+sample_rate: f64" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#4A130E;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1145" width="300" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_ffi_biquad_coeffs" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;#[repr(C)] struct&amp;gt;&amp;gt;&lt;br/&gt;FfiBiquadCoeffs&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;7 bands: [FfiBiquadCoeffs; 7]&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;+b0: f64&lt;br/&gt;+b1: f64&lt;br/&gt;+b2: f64&lt;br/&gt;+a1: f64&lt;br/&gt;+a2: f64" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#FADBD8;strokeColor=#922B21;fontColor=#4A130E;" vertex="1" parent="1">
+          <mxGeometry x="55" y="1410" width="300" height="190" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_rbj_cookbook" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;module&amp;gt;&amp;gt;&lt;br/&gt;rbj_cookbook&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+compute_biquad_coeffs(spec: &amp;amp;FfiBiquadSpec) -&amp;gt; FfiBiquadCoeffs&lt;br/&gt;+compute_7_band_coeffs(specs: &amp;amp;[FfiBiquadSpec; 7]) -&amp;gt; [FfiBiquadCoeffs; 7]&lt;br/&gt;+peak_bell_coeffs(f0: f64, gain_db: f64, q: f64, fs: f64) -&amp;gt; FfiBiquadCoeffs&lt;br/&gt;+low_shelf_coeffs(...) -&amp;gt; FfiBiquadCoeffs&lt;br/&gt;+high_shelf_coeffs(...) -&amp;gt; FfiBiquadCoeffs" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#F6DDCC;strokeColor=#A04000;fontColor=#4D1F00;" vertex="1" parent="1">
+          <mxGeometry x="415" y="1145" width="660" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_fr_analyzer" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;module&amp;gt;&amp;gt;&lt;br/&gt;fr_analyzer&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+compute_cascade_fr_db(coeffs: &amp;amp;[FfiBiquadCoeffs; 7], grid_512: &amp;amp;[f32; 512], fs: f64) -&amp;gt; [f32; 512]&lt;br/&gt;+compute_compensated_fr(measured: &amp;amp;[f32; 512], eq_db: &amp;amp;[f32; 512]) -&amp;gt; [f32; 512]" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#F6DDCC;strokeColor=#A04000;fontColor=#4D1F00;" vertex="1" parent="1">
+          <mxGeometry x="415" y="1360" width="660" height="175" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_smoothing_preamp" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;module&amp;gt;&amp;gt;&lt;br/&gt;smoothing_preamp&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;+interpolate_band_specs(start: &amp;amp;[FfiBiquadSpec; 7], end: &amp;amp;[FfiBiquadSpec; 7], alpha: f32) -&amp;gt; [FfiBiquadSpec; 7]&lt;br/&gt;+compute_safe_preamp_db(eq_db: &amp;amp;[f32; 512], headroom_db: f32) -&amp;gt; f32" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#F6DDCC;strokeColor=#A04000;fontColor=#4D1F00;" vertex="1" parent="1">
+          <mxGeometry x="415" y="1570" width="660" height="180" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_eq_engine_orchestrator" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;struct&amp;gt;&amp;gt;&lt;br/&gt;EqEngineOrchestrator&lt;/b&gt;&lt;/div&gt;&lt;hr/&gt;-current_bands: [FfiBiquadSpec; 7]&lt;br/&gt;-audio_driver: AndroidAudioDriver&lt;hr/&gt;+submit_manual_eq(bands: &amp;amp;[FfiBiquadSpec; 7]) -&amp;gt; [f32; 512]&lt;br/&gt;+submit_ai_eq(bands: &amp;amp;[FfiBiquadSpec; 7]) -&amp;gt; [f32; 512]&lt;br/&gt;+set_enabled(enabled: bool)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#F6DDCC;strokeColor=#A04000;fontColor=#4D1F00;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="1145" width="525" height="265" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_android_audio_driver" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;module / jni-rs&amp;gt;&amp;gt;&lt;br/&gt;android_audio_driver&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Directly invokes android.media.audiofx.DynamicsProcessing via Rust JNI (jni-rs) on sessionId = 0&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-jvm: jni::JavaVM&lt;br/&gt;-dynamics_processing_ref: GlobalRef&lt;br/&gt;-session_id: i32 = 0&lt;hr/&gt;+init_dynamics_processing(env: JNIEnv, band_count: i32 = 7) -&amp;gt; Result&amp;lt;(), JniErr&amp;gt;&lt;br/&gt;+push_7_bands_to_android(bands: &amp;amp;[FfiBiquadSpec; 7], preamp_db: f32)&lt;br/&gt;+set_system_eq_enabled(enabled: bool)" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#F6DDCC;strokeColor=#A04000;fontColor=#4D1F00;" vertex="1" parent="1">
+          <mxGeometry x="1135" y="1470" width="525" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_headset_receiver" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;class&amp;gt;&amp;gt;&lt;br/&gt;HeadsetConnectionReceiver : BroadcastReceiver&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;Forwards ACTION_HEADSET_PLUG &amp;amp; BT names over EventChannel; registers JavaVM for Rust jni-rs&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;-eventSink: EventSink?&lt;br/&gt;-jvmRef: JavaVM*&lt;hr/&gt;+onReceive(context: Context, intent: Intent): Unit&lt;br/&gt;+registerRustJavaVmHook(): Unit (JNI_OnLoad)&lt;br/&gt;-extractBluetoothDeviceName(intent: Intent): String?" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D4EFDF;strokeColor=#1E8449;fontColor=#0B3B1E;" vertex="1" parent="1">
+          <mxGeometry x="1805" y="1145" width="725" height="265" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_android_dynamics_processing_api" value="&lt;div style=&quot;text-align:center;&quot;&gt;&lt;b&gt;&amp;lt;&amp;lt;external JNI target&amp;gt;&amp;gt;&lt;br/&gt;AndroidDynamicsProcessingApi&lt;/b&gt;&lt;br/&gt;&lt;span style=&quot;font-size:10px;&quot;&gt;android.media.audiofx.DynamicsProcessing (invoked directly by Rust jni-rs)&lt;/span&gt;&lt;/div&gt;&lt;hr/&gt;+sessionId: int = 0 (Global Audio / MODIFY_AUDIO_SETTINGS)&lt;br/&gt;+bandCount: int = 7&lt;br/&gt;+channelCount: int&lt;hr/&gt;+setInputGainAllChannelsTo(preampDb: float): void&lt;br/&gt;+setPreEqBandAllChannelsTo(bandIndex: int, band: DynamicsProcessing.EqBand): void&lt;br/&gt;+setEnabled(enabled: boolean): int" style="rounded=1;whiteSpace=wrap;html=1;align=left;verticalAlign=top;spacingLeft=8;spacingRight=8;spacingTop=6;spacingBottom=6;fontSize=11;strokeWidth=1.5;fillColor=#D5F5E3;strokeColor=#117A65;fontColor=#0B3B1E;" vertex="1" parent="1">
+          <mxGeometry x="1805" y="1470" width="725" height="280" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e1" value="type" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.25;exitY=0;entryX=0.25;entryY=1;" edge="1" parent="1" source="c4_biquad_band" target="c4_filter_type">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e2" value="measuredFr" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#1B4F72;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="c4_headphone_model" target="c4_freq_response">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e3" value="targetType" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.12;entryX=1;entryY=0.5;" edge="1" parent="1" source="c4_eq_profile" target="c4_target_curve_type">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="438" y="754" />
+              <mxPoint x="438" y="377" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e4" value="effectiveBands [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#1B4F72;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.28;entryX=1;entryY=0.5;" edge="1" parent="1" source="c4_eq_profile" target="c4_biquad_band">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="448" y="794" />
+              <mxPoint x="448" y="530" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e5" value="abstractParams" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#1B4F72;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="c4_eq_profile" target="c4_abstract_tuning">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e6" value="manages profile" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.82;entryX=1;entryY=0.35;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_eq_profile">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="955" y="370" />
+              <mxPoint x="955" y="810" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e7" value="onHeadphoneSelected()" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.55;entryX=1;entryY=0.5;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_headphone_model">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="955" y="311" />
+              <mxPoint x="955" y="447" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e8" value="returns" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.3;entryX=0;entryY=0.7;" edge="1" parent="1" source="c4_headphone_repo" target="c4_headphone_model">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="438" y="676" />
+              <mxPoint x="438" y="476" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e9" value="persists" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.65;" edge="1" parent="1" source="c4_profile_repo" target="c4_eq_profile">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e10" value="FTS5 queries" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.2;entryX=0.5;entryY=0;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_headphone_repo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="942" y="234" />
+              <mxPoint x="942" y="175" />
+              <mxPoint x="350" y="175" />
+              <mxPoint x="350" y="615" />
+              <mxPoint x="237" y="615" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e11" value="saves/loads" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.92;entryX=1;entryY=0.88;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_profile_repo">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="968" y="392" />
+              <mxPoint x="968" y="985" />
+              <mxPoint x="440" y="985" />
+              <mxPoint x="440" y="950" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e12" value="headsetListener" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.88;entryX=1;entryY=0.3;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_headset_listener">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1672" y="384" />
+              <mxPoint x="1672" y="680" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e13" value="manual EQ [7] / bypass (returns 512-pt FR)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.65;entryX=1;entryY=0.35;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_rust_eq_ffi">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1684" y="333" />
+              <mxPoint x="1684" y="858" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e14" value="aiDispatcher (512-pt FR)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.4;entryX=0;entryY=0.45;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_ai_dispatcher">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e15" value="Isolate SendPort / ReceivePort" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c4_ai_dispatcher" target="c4_tflite_worker">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e16" value="rustFfi handle" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.82;entryX=1;entryY=0.2;" edge="1" parent="1" source="c4_ai_dispatcher" target="c4_rust_eq_ffi">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1735" y="438" />
+              <mxPoint x="1735" y="829" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e17" value="flutter_rust_bridge: submit_manual_eq([7]) / set_enabled -&gt; [f32; 512]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 3;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#A04000;fontColor=#7E3100;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.55;exitY=1;entryX=0.4;entryY=0;" edge="1" parent="1" source="c4_rust_eq_ffi" target="c4_eq_engine_orchestrator">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e18" value="marshals [FfiBiquadSpec; 7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.1;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c4_rust_eq_ffi" target="c4_ffi_biquad_spec">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1052" y="1025" />
+              <mxPoint x="205" y="1025" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e19" value="flutter_rust_bridge: forwardToRustEngine([7]) -&gt; submit_ai_eq([FfiBiquadSpec; 7]) -&gt; [f32; 512]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 3;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#A04000;fontColor=#7E3100;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.35;exitY=1;entryX=0.85;entryY=0;" edge="1" parent="1" source="c4_tflite_worker" target="c4_eq_engine_orchestrator">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="2059" y="1055" />
+              <mxPoint x="1581" y="1055" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e20" value="current_bands [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;startArrow=diamondThin;startFill=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#1B4F72;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.15;exitY=0;entryX=0.85;entryY=0;" edge="1" parent="1" source="c4_eq_engine_orchestrator" target="c4_ffi_biquad_spec">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1214" y="1110" />
+              <mxPoint x="310" y="1110" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e21" value="compute_7_band_coeffs()" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.35;entryX=1;entryY=0.5;" edge="1" parent="1" source="c4_eq_engine_orchestrator" target="c4_rbj_cookbook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e22" value="compute_cascade_fr_db([7]) -&gt; [f32; 512]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.7;entryX=1;entryY=0.35;" edge="1" parent="1" source="c4_eq_engine_orchestrator" target="c4_fr_analyzer">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1105" y="1330" />
+              <mxPoint x="1105" y="1421" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e23" value="interpolate [7] &amp; safe preamp" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.12;exitY=1;entryX=1;entryY=0.45;" edge="1" parent="1" source="c4_eq_engine_orchestrator" target="c4_smoothing_preamp">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1198" y="1440" />
+              <mxPoint x="1105" y="1440" />
+              <mxPoint x="1105" y="1651" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e24" value="audio_driver: push_7_bands_to_android / set_system_eq_enabled" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.55;exitY=1;entryX=0.55;entryY=0;" edge="1" parent="1" source="c4_eq_engine_orchestrator" target="c4_android_audio_driver">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e25" value="reads [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.35;entryX=1;entryY=0.35;" edge="1" parent="1" source="c4_rbj_cookbook" target="c4_ffi_biquad_spec">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e26" value="produces [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.8;entryX=1;entryY=0.25;" edge="1" parent="1" source="c4_rbj_cookbook" target="c4_ffi_biquad_coeffs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="1289" />
+              <mxPoint x="385" y="1457" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e27" value="evaluates [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.55;entryX=1;entryY=0.65;" edge="1" parent="1" source="c4_fr_analyzer" target="c4_ffi_biquad_coeffs">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="1456" />
+              <mxPoint x="385" y="1533" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e28" value="interpolates [7]" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="c4_smoothing_preamp" target="c4_ffi_biquad_spec">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="385" y="1660" />
+              <mxPoint x="385" y="1775" />
+              <mxPoint x="42" y="1775" />
+              <mxPoint x="42" y="1240" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e29" value="Rust jni-rs (sessionId = 0, bandCount = 7): DynamicsProcessing" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=8 3;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#1E8449;fontColor=#0E4725;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="c4_android_audio_driver" target="c4_android_dynamics_processing_api">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="c4_e30" value="JNI_OnLoad: JavaVM* hook" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#5D6D7E;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.75;entryX=1;entryY=0.2;" edge="1" parent="1" source="c4_headset_receiver" target="c4_android_audio_driver">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1735" y="1344" />
+              <mxPoint x="1735" y="1526" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e31" value="EventChannel: ACTION_HEADSET_PLUG / BT HeadsetEvent" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=classic;endFill=1;strokeWidth=2;strokeColor=#1E8449;fontColor=#0E4725;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.3;entryX=1;entryY=0.6;" edge="1" parent="1" source="c4_headset_receiver" target="c4_headset_listener">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1712" y="1225" />
+              <mxPoint x="1712" y="714" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c4_e32" value="drives (512-pt Float32List curves)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;jettySize=auto;html=1;endArrow=open;endFill=0;strokeWidth=1.5;strokeColor=#2C3E50;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;entryX=0.5;entryY=0;" edge="1" parent="1" source="c4_ui_shell_controller" target="c4_fr_chart_painter">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
